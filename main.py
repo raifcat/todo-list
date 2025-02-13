@@ -8,10 +8,10 @@ import dbhandler as db
 import re
 import os
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
-print(os.getenv("GPT_KEY"))
 #from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -278,6 +278,43 @@ async def itemGet(request: Request):
 
         raise HTTPException(status_code=200, detail=items)
     
+client = OpenAI(
+    api_key=os.environ.get("GPT_KEY"),  # This is the default and can be omitted
+)
+'''
+assistant = client.beta.assistants.create(
+    name="Description writer",
+    instructions="You are made to generate a to-do list description when given a prompt. Return a single exclamation mark '!' when you are unable to",
+    #tools=[{"type": "code_interpreter"}],
+    model="gpt-4-1106-preview"
+)`
+'''
 
+def generateDesc(title):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": f"Create a short description of a task (with less than 255 characters) with the prompt '{title}', If you are unable to create a good description with the prompt, just respond with an exclamation mark '!'",
+            }
+        ],
+        model="gpt-4o",
+    )
+    if chat_completion.choices[0].message.content == "!":
+        return False
+
+    return chat_completion.choices[0].message.content
+
+    
+@app.post("/item-desc-suggestion")
+async def aiSuggestion(request: Request):
+    if checkIfUserLoggedIn(request.cookies.get("token")):
+        json = await request.json()
+        desc = generateDesc(json["name"])
+
+        if desc == False:
+            raise HTTPException(status_code=400, detail="Bad Request")
+
+        raise HTTPException(status_code=200, detail={"desc": desc})
     
     

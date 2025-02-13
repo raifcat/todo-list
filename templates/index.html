@@ -26,7 +26,7 @@
 
             <!--<input type="checkbox" name="done" id="form-done">-->
 
-            <label for="desc">Description</label>
+            <label for="desc">Description <span class="small-text" style="font-size: 12px;">You can generate a description with ChatGPT by typing in a title and leaving the description empty</span></label>
             <textarea name="desc" id="form-desc" style="margin-bottom: 5px;" rows="5"  placeholder="This is my task that I have to do"></textarea>
             <p class="small-text" id="desc-limit">0/255</p>
 
@@ -48,7 +48,7 @@
             {% for item in items %}
                 <li class="list-item">
 
-                    <p>{{item[2]}}</p>
+                    <p>{{item[2]}} <span class="small-text" style="font-size: 12px;">{{item[5]}}</span></p>
                     <p class="list-description">{{item[3]}}</p>
 
                 </li>

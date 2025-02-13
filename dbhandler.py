@@ -2,6 +2,7 @@ import sqlite3
 import uuid
 import secrets
 import hashlib
+import datetime
 
 sql = sqlite3.connect('database.db', check_same_thread=False)
 
@@ -102,7 +103,7 @@ def createTask(token: str, name: str, desc: str):
 
     t = [id, name, desc]
 
-    cursor.execute('''INSERT INTO items (owner, name, desc, done) VALUES (?, ?, ?, 0)''', t)
+    cursor.execute('''INSERT INTO items (owner, name, desc, done, created) VALUES (?, ?, ?, 0, datetime('now', 'localtime'))''', t)
     sql.commit()
     cursor.close()
 
@@ -149,6 +150,24 @@ def getItems(token: str, done: int, amount: int, offset: int):
                        ''', t)
         
         items = cursor.fetchall()
+        cursor.close()
+
+        return items
+
+def getItem(token: str, id: int):
+    if getUserInfoFromToken(token):
+
+        cursor = sql.cursor()
+
+        ownerid = getUserInfoFromToken(token)[0]
+
+        t = [ownerid, id]
+
+        cursor.execute('''SELECT * FROM items
+                       WHERE owner = ? AND id = ?
+                       ''', t)
+        
+        items = cursor.fetchone()
         cursor.close()
 
         return items
