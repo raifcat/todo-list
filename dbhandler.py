@@ -135,17 +135,33 @@ def getUserInfoFromToken(token: str):
 
     return user
 
-def getItems(token: str, done: int, amount: int, offset: int):
+def getItems(token: str, amount: int, offset: int, order: str, search: str, done: int):
     if getUserInfoFromToken(token):
 
         cursor = sql.cursor()
 
         id = getUserInfoFromToken(token)[0]
 
-        t = [id, done, amount, offset]
+        searchq = search
+        if search == "!" or not search:
+            searchq = ""
 
-        cursor.execute('''SELECT * FROM items
-                       WHERE owner = ? AND done = ?
+        orderq = order.upper()
+        if order.lower() != "desc" or order.lower() != "asc":
+            orderq = "DESC"
+        
+        doneCommand = ""
+        
+        t = [id, f"%{searchq}%", amount, offset]
+
+        doneq = done
+        if done == 0 or done == 1:
+            doneCommand = f"AND done = {doneq}"
+            
+
+        cursor.execute(f'''SELECT * FROM items
+                       WHERE owner = ? {doneCommand} AND name LIKE ?
+                       ORDER BY id {orderq}
                        LIMIT ? OFFSET ?
                        ''', t)
         
@@ -186,7 +202,41 @@ def deleteItem(token: str, id: int):
                        ''', t)
         sql.commit()
         cursor.close()
-        
+
+        return True
+
+
+    return False
+
+def checkItem(token: str, id: int):
+    if getItem(token, id):
+        cursor = sql.cursor()
+
+        ownerid = getUserInfoFromToken(token)[0]
+
+        t = [ownerid, id]
+
+        cursor.execute('''SELECT done FROM items
+                       WHERE owner = ? AND id = ?
+                       ''', t)
+        done = cursor.fetchone()
+
+        print(done[0])
+
+        check = 1
+        if done[0] == 1:
+            check = 0
+
+        t = [check, ownerid, id]
+
+        cursor.execute('''UPDATE items
+                       SET done = ?
+                       WHERE owner = ? AND id = ?
+                       ''', t)
+
+        sql.commit()
+        cursor.close()
+
         return True
 
 

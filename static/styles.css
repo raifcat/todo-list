@@ -43,7 +43,7 @@ input, textarea, .main-button {
     min-width: 100%;
     resize: vertical;
     padding: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     margin-top: 5px;
     font-size: 20px;
 }
@@ -83,6 +83,7 @@ input:focus, textarea:focus {
 #sign-div {
     position: absolute;
     left: 50%;
+    top: 50px;
     transform: translateX(-50%);
     max-width: clamp(250px, 20%, 500px);
     min-width: clamp(250px, 20%, 500px);
@@ -108,6 +109,7 @@ button:disabled{
 
 button:disabled:hover{
     background-color: var(--disabled-bg) !important;
+    color: var(--primary-c) !important;
 }
 
 label{
@@ -143,6 +145,15 @@ label{
     padding-left: 0;
 }
 
+body{
+    margin: 0;
+}
+
+#navbar{
+    background-color: var(--primary-bg-c);
+    padding: 10px;
+}
+
 #navbar a{
     text-decoration: none;
     margin-right: 15px;
@@ -162,6 +173,30 @@ label{
 .list-item p {
     font-size: 20px;
     overflow-wrap: break-word;
+}
+
+.list-item-div-main {
+    display: list-item;
+    width: 100%;
+}
+
+.list-item-div-checkbox{
+    display: list-item;
+    margin-right: 10px;
+}
+
+.checkbox-btn{
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 2px;
+}
+
+.list-item-div-main p{
+    display: block !important;
+}
+
+.list-item-div-main a{
+    display: block !important;
 }
 
 .list-description{
@@ -208,4 +243,12 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
+}
+
+.is-1{
+    text-decoration:line-through;
+}
+
+.btn-1{
+    background-color: white;
 }

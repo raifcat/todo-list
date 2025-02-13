@@ -79,7 +79,9 @@ def root(request: Request):
             )
     
     try:
-        return RedirectResponse(url='/', status_code=302)
+        return templates.TemplateResponse(
+            request=request, name="index.html", context={}
+        )
     except:
         return templates.TemplateResponse(
             request=request, name="error.html", context={}
@@ -110,7 +112,7 @@ def root(request: Request):
 
 
 @app.get("/{page}",response_class = HTMLResponse)
-def root(request: Request, page: int):
+def root(request: Request, page: int = 1, order: str = "desc", search: str = "!", done: int = 0):
     user = checkIfUserLoggedIn(request.cookies.get("token"))
 
     if not user:
@@ -123,16 +125,16 @@ def root(request: Request, page: int):
                 request=request, name="error.html", context={}
             )
 
-    try:
-        items = db.getItems(request.cookies.get("token"), 0, 5, (page * 5) - 5)
+    #try:
+    items = db.getItems(request.cookies.get("token"), 5, (page * 5) - 5, order, search, done)
 
-        return templates.TemplateResponse(
-            request=request, name="index.html", context={"user": user, "items": items}
-        )
-    except:
-        return templates.TemplateResponse(
-            request=request, name="error.html", context={}
-        )
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"user": user, "items": items}
+    )
+    #except:
+    #    return templates.TemplateResponse(
+    #        request=request, name="error.html", context={}
+    #    )
     
 usernameRegex = r'''[\s_!"£$%^&*()\[\]:@~<>?|\\'#,./]'''
 passwordRegex = r'''[\s_!"£$%^&*()\[\]:@~<>?|\\'#,./]'''
@@ -316,12 +318,23 @@ async def aiSuggestion(request: Request):
         raise HTTPException(status_code=200, detail={"desc": desc})
     
 @app.get("/delete-item/{id}/{page}")
-async def deleteItem(request: Request, id: int, page: int):
+async def deleteItem(request: Request, id: int, page: int, order: str = "desc", search: str = "!", done: int = 0):
     if checkIfUserLoggedIn(request.cookies.get("token")):
         
         if db.deleteItem(request.cookies.get("token"), id):
-            response = RedirectResponse(f'/{page}', status_code= 302)
+            response = RedirectResponse(f'/{page}?order={order}&search={search}&done={done}', status_code= 302)
             return response
         
-        response = RedirectResponse(f'/{page}', status_code= 400)
+        response = RedirectResponse(f'/{page}?order={order}&search={search}&done={done}', status_code= 400)
+        return response
+
+@app.get("/check-item/{id}/{page}")
+async def checkItem(request: Request, id: int, page: int, order: str = "desc", search: str = "!", done: int = 0):
+    if checkIfUserLoggedIn(request.cookies.get("token")):
+        
+        if db.checkItem(request.cookies.get("token"), id):
+            response = RedirectResponse(f'/{page}?order={order}&search={search}&done={done}', status_code= 302)
+            return response
+        
+        response = RedirectResponse(f'/{page}?order={order}&search={search}&done={done}', status_code= 400)
         return response
