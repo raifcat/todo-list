@@ -135,13 +135,13 @@ def getUserInfoFromToken(token: str):
 
     return user
 
-def getItems(token: str, amount: int, offset: int, order: str, search: str, done: int):
+def getItems(token: str, amount: int, offset: int): # , order: str, search: str, done: int
     if getUserInfoFromToken(token):
 
         cursor = sql.cursor()
 
         id = getUserInfoFromToken(token)[0]
-
+        '''
         searchq = search
         if search == "!" or not search:
             searchq = ""
@@ -157,11 +157,13 @@ def getItems(token: str, amount: int, offset: int, order: str, search: str, done
         doneq = done
         if done == 0 or done == 1:
             doneCommand = f"AND done = {doneq}"
-            
+        '''
+
+        t = [id, amount, offset]
 
         cursor.execute(f'''SELECT * FROM items
-                       WHERE owner = ? {doneCommand} AND name LIKE ?
-                       ORDER BY id {orderq}
+                       WHERE owner = ?
+                       ORDER BY id DESC
                        LIMIT ? OFFSET ?
                        ''', t)
         

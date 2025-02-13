@@ -137,7 +137,7 @@ function FormInputChange(){
     }
 
 }
-
+/*
 const urlParams = new URLSearchParams(window.location.search);
 
 const order = urlParams.get("order")
@@ -170,7 +170,7 @@ function addParameters(){
     urlParams.set('done', done);
 
     return urlParams
-}
+}*/
 
 const pageBack = document.getElementById("page-back")
 const pageNext = document.getElementById("page-next")
@@ -188,18 +188,18 @@ if (page == 1){
 }
 
 function pageBackFunc(){
-    window.location.href = `/${page - 1 }?order=${order}&search=${search}&done=${done}`;
+    window.location.href = `/${page - 1}`; //?order=${order}&search=${search}&done=${done}
 }
 
 function pageNextFunc() {
-    window.location.href = `/${page + 1}?order=${order}&search=${search}&done=${done}`;
+    window.location.href = `/${page + 1}`;
 }
 
 
 pageNum.addEventListener("change", changePageNum)
 
 function changePageNum(){
-    window.location.href = `/${pageNum.value}?order=${order}&search=${search}&done=${done}`;
+    window.location.href = `/${pageNum.value}`;
 }
 
 /*
