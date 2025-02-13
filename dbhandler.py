@@ -171,3 +171,23 @@ def getItem(token: str, id: int):
         cursor.close()
 
         return items
+
+def deleteItem(token: str, id: int):
+
+    if getItem(token, id):
+        cursor = sql.cursor()
+
+        ownerid = getUserInfoFromToken(token)[0]
+
+        t = [ownerid, id]
+
+        cursor.execute('''DELETE FROM items
+                       WHERE owner = ? AND id = ?
+                       ''', t)
+        sql.commit()
+        cursor.close()
+        
+        return True
+
+
+    return False

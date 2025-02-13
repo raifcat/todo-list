@@ -137,8 +137,28 @@ function FormInputChange(){
     }
 
 }
+const pageBack = document.getElementById("page-back")
+const pageNext = document.getElementById("page-next")
+const pageNum = document.getElementById("page-num")
 
+page = parseInt(window.location.pathname.replace("/", ""))
 
+pageNum.value = page
+
+pageBack.addEventListener("click", pageBackFunc)
+pageNext.addEventListener("click", pageNextFunc)
+
+if (page == 1){
+    pageBack.disabled = true
+}
+
+function pageBackFunc(){
+    window.location.href = `/${page - 1 }`;
+}
+
+function pageNextFunc() {
+    window.location.href = `/${page + 1}`;
+}
 
 /*
 async function GetItem(done, start, amount) {

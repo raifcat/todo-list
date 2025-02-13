@@ -39,8 +39,9 @@
 
         <div id="pagination-div">
             <button id="page-back" class="page-btn">Back</button>
-            <input type="number" name="page-num" id="page-num" size="1" min="1">
             <button id="page-next" class="page-btn">Next</button>
+            <input type="number" name="page-num" id="page-num" size="1" min="1">
+            
         </div>
 
         <ul id="list-items">
@@ -48,8 +49,9 @@
             {% for item in items %}
                 <li class="list-item">
 
-                    <p>{{item[2]}} <span class="small-text" style="font-size: 12px;">{{item[5]}}</span></p>
+                    <p>{{item[2]}}  <span class="small-text" style="font-size: 12px;">{{item[5]}}</span></p>
                     <p class="list-description">{{item[3]}}</p>
+                    <a href="/delete-item/{{item[0]}}{{request.path}}" class="error-text" style="min-width: 100%;display: block;margin-top: 5px;text-align: right;">Delete item</a>
 
                 </li>
             {% endfor %}

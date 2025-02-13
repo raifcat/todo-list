@@ -102,9 +102,7 @@ def root(request: Request):
     try:
         items = db.getItems(request.cookies.get("token"), 0, 5, 0)
 
-        return templates.TemplateResponse(
-            request=request, name="index.html", context={"user": user, "items": items}
-        )
+        return RedirectResponse(url='/1', status_code=302)
     except:
         return templates.TemplateResponse(
             request=request, name="error.html", context={}
@@ -317,4 +315,13 @@ async def aiSuggestion(request: Request):
 
         raise HTTPException(status_code=200, detail={"desc": desc})
     
-    
+@app.get("/delete-item/{id}/{page}")
+async def deleteItem(request: Request, id: int, page: int):
+    if checkIfUserLoggedIn(request.cookies.get("token")):
+        
+        if db.deleteItem(request.cookies.get("token"), id):
+            response = RedirectResponse(f'/{page}', status_code= 302)
+            return response
+        
+        response = RedirectResponse(f'/{page}', status_code= 400)
+        return response
