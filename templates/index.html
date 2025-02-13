@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Item Details</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <nav id="navbar">
+        <a href="/">Signed in as {{user[1]}}</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div id="main-div">
+    
+        <div id="create-div">
+            
+            <h1>Create a task</h1>
+
+            <label for="name">Title</label>
+            <input type="text" name="name" id="form-name" style="margin-bottom: 5px;" placeholder="My task">
+            <p class="small-text" id="name-limit">0/50</p>
+
+            <!--<input type="checkbox" name="done" id="form-done">-->
+
+            <label for="desc">Description</label>
+            <textarea name="desc" id="form-desc" style="margin-bottom: 5px;" rows="5"  placeholder="This is my task that I have to do"></textarea>
+            <p class="small-text" id="desc-limit">0/255</p>
+
+            <ul id="error-text-list" class="error-text-list">
+            </ul>
+
+            <button id="form-button" class="main-button">Create Task</button>
+        
+        </div>
+
+        <div id="pagination-div">
+            <button id="page-back" class="page-btn">Back</button>
+            <input type="number" name="page-num" id="page-num" size="1" min="1">
+            <button id="page-next" class="page-btn">Next</button>
+        </div>
+
+        <ul id="list-items">
+
+            {% for item in items %}
+                <li class="list-item">
+
+                    <p>{{item[2]}}</p>
+                    <p class="list-description">{{item[3]}}</p>
+
+                </li>
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+    <script src="{{ url_for('static', path='/index.js') }}"></script>
+
+</body>

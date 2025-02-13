@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <title>Login</title>
+</head>
+<body>
+    
+    <div id="sign-div">
+
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" style="margin-bottom: 5px;">
+
+        <ul id="error-text-list" class="error-text-list">
+        </ul>
+
+        <button id="login-button" class="main-button">Sign in</button>
+        <a href="/signup">Need an account? Sign up</a>
+
+    </div>
+    
+    <script src="{{ url_for('static', path='/signin.js') }}"></script>
+
+</body>
+</html>
