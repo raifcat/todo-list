@@ -275,7 +275,7 @@ async def itemGet(request: Request):
         raise HTTPException(status_code=200, detail=items)
     
 client = OpenAI(
-    api_key=os.environ.get("GPT_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("GPT_KEY"),
 )
 '''
 assistant = client.beta.assistants.create(
